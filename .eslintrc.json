@@ -12,7 +12,7 @@
     "eslint-config-prettier",
     "prettier"
   ],
-  "ignorePatterns": [".eslintrc.js"],
+  "ignorePatterns": [".eslintrc.js", "jest.config.js"],
   "rules": {
     "prettier/prettier": [
       "warn",
