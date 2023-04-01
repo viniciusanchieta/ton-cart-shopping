@@ -1,12 +1,34 @@
-import React from 'react';
-import { BaseLayoutComponent } from '~/presentation/common/layouts';
-import { ProductListTag } from '~/presentation/screens';
+import { Text, View } from 'react-native';
+import { MakeProductListScreen } from '~/main/factories/screens';
+import { BaseNavigationComponent } from '~/presentation/navigation';
 
-function App(): JSX.Element {
+function CartScreen() {
   return (
-    <BaseLayoutComponent>
-      <ProductListTag />
-    </BaseLayoutComponent>
+    <View>
+      <Text
+        style={{
+          color: 'black'
+        }}
+      >
+        Cart
+      </Text>
+    </View>
   );
 }
-export default App;
+
+export default function App() {
+  return (
+    <BaseNavigationComponent
+      screens={[
+        {
+          name: 'ProductList',
+          component: MakeProductListScreen
+        },
+        {
+          name: 'cart',
+          component: CartScreen
+        }
+      ]}
+    />
+  );
+}

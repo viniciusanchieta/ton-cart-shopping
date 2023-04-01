@@ -6,6 +6,9 @@ const { colors } = baseTheme;
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.bgMain,
-    marginHorizontal: 16
+    paddingHorizontal: 20
+  },
+  content: {
+    paddingHorizontal: 20
   }
 });
