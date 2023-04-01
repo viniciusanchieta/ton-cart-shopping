@@ -1,13 +1,11 @@
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { styles } from './base-layout-styles';
 import { BaseLayoutProps } from './interfaces';
 
 function BaseLayout({ children }: BaseLayoutProps) {
-  const { container } = styles;
-
   return (
-    <SafeAreaView testID='base-layout' style={container}>
-      {children}
+    <SafeAreaView style={styles.container} testID='base-layout'>
+      <View style={styles.content}>{children}</View>
     </SafeAreaView>
   );
 }
