@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
+import { ShoppingCartContext } from '~/infra/contexts';
 import type { ProductProps } from './interfaces';
 import ProductComponent from './product';
 
@@ -10,7 +11,28 @@ const defaultProps: ProductProps = {
   urlImage: 'https://image.com/image.png'
 };
 
-const makeSut = () => render(<ProductComponent {...defaultProps} />);
+const defaultContextState = {
+  contextState: {
+    items: [
+      {
+        id: 1,
+        name: 'banana',
+        price: 'R$ 2,00',
+        new: true,
+        image: 'https://image.com/image.png',
+        quantity: 1
+      }
+    ]
+  },
+  setContextState: jest.fn()
+};
+
+const makeSut = () =>
+  render(
+    <ShoppingCartContext.Provider value={defaultContextState}>
+      <ProductComponent {...defaultProps} />
+    </ShoppingCartContext.Provider>
+  );
 
 describe('Product component', () => {
   describe('Render', () => {
@@ -31,16 +53,18 @@ describe('Product component', () => {
   describe('Interaction', () => {
     it('should add to cart', () => {
       makeSut();
-      const button = screen.getByTestId('button-add-to-cart');
+      const button = screen.getByTestId('button-add-to-cart-banana');
       fireEvent.press(button);
       expect(button).toBeTruthy();
     });
 
     it('should increment quantity', () => {
       makeSut();
-      const buttonAddCart = screen.getByTestId('button-add-to-cart');
+      const buttonAddCart = screen.getByTestId('button-add-to-cart-banana');
       fireEvent.press(buttonAddCart);
-      const buttonIncrement = screen.getByTestId('button-increment-quantity');
+      const buttonIncrement = screen.getByTestId(
+        'button-increment-quantity-banana'
+      );
       fireEvent.press(buttonIncrement);
       const textQuantity = screen.getByTestId('text-quantity');
       expect(textQuantity).toHaveTextContent('2');
@@ -48,11 +72,15 @@ describe('Product component', () => {
 
     it('should decrement quantity', () => {
       makeSut();
-      const buttonAddCart = screen.getByTestId('button-add-to-cart');
+      const buttonAddCart = screen.getByTestId('button-add-to-cart-banana');
       fireEvent.press(buttonAddCart);
-      const buttonIncrement = screen.getByTestId('button-increment-quantity');
+      const buttonIncrement = screen.getByTestId(
+        'button-increment-quantity-banana'
+      );
       fireEvent.press(buttonIncrement);
-      const buttonDecrement = screen.getByTestId('button-decrement-quantity');
+      const buttonDecrement = screen.getByTestId(
+        'button-decrement-quantity-banana'
+      );
       fireEvent.press(buttonDecrement);
       const textQuantity = screen.getByTestId('text-quantity');
       expect(textQuantity).toHaveTextContent('1');
@@ -60,10 +88,125 @@ describe('Product component', () => {
 
     it('should remove from cart', () => {
       makeSut();
-      const buttonAddCart = screen.getByTestId('button-add-to-cart');
+      const buttonAddCart = screen.getByTestId('button-add-to-cart-banana');
       fireEvent.press(buttonAddCart);
-      const buttonDecrement = screen.getByTestId('button-decrement-quantity');
+      const buttonDecrement = screen.getByTestId(
+        'button-decrement-quantity-banana'
+      );
       fireEvent.press(buttonDecrement);
+    });
+
+    it('should increment quantity in apple item', () => {
+      defaultProps.id = 2;
+      defaultProps.name = 'apple';
+      makeSut();
+      const buttonAddCart = screen.getByTestId('button-add-to-cart-apple');
+      fireEvent.press(buttonAddCart);
+      const buttonIncrement = screen.getByTestId(
+        'button-increment-quantity-apple'
+      );
+      fireEvent.press(buttonIncrement);
+      const textQuantity = screen.getByTestId('text-quantity');
+      expect(textQuantity).toHaveTextContent('2');
+    });
+
+    it('should increment quantity in apple item with context state empty', () => {
+      defaultContextState.contextState.items = [];
+      defaultProps.id = 2;
+      defaultProps.name = 'apple';
+      makeSut();
+      const buttonAddCart = screen.getByTestId('button-add-to-cart-apple');
+      fireEvent.press(buttonAddCart);
+
+      const textQuantity = screen.getByTestId('text-quantity');
+      expect(textQuantity).toHaveTextContent('1');
+    });
+
+    it('should decrement quantity in orange item', () => {
+      defaultProps.id = 5;
+      defaultProps.name = 'orange';
+      defaultContextState.contextState.items = [
+        {
+          id: 5,
+          name: 'orange',
+          price: 'R$ 2,00',
+          new: true,
+          image: 'https://image.com/image.png',
+          quantity: 2
+        }
+      ];
+      makeSut();
+      const buttonAddCart = screen.getByTestId('button-add-to-cart-orange');
+      fireEvent.press(buttonAddCart);
+      const buttonIncrement = screen.getByTestId(
+        'button-increment-quantity-orange'
+      );
+      fireEvent.press(buttonIncrement);
+      const buttonDecrement = screen.getByTestId(
+        'button-decrement-quantity-orange'
+      );
+      fireEvent.press(buttonDecrement);
+      const textQuantity = screen.getByTestId('text-quantity');
+      expect(textQuantity).toHaveTextContent('1');
+    });
+
+    it('should remove from cart in apple item', () => {
+      defaultProps.id = 2;
+      defaultProps.name = 'apple';
+      makeSut();
+      const buttonAddCart = screen.getByTestId('button-add-to-cart-apple');
+      fireEvent.press(buttonAddCart);
+      const buttonDecrement = screen.getByTestId(
+        'button-decrement-quantity-apple'
+      );
+      fireEvent.press(buttonDecrement);
+    });
+
+    it('should context initial empty and add to cart', () => {
+      defaultContextState.contextState.items = [];
+      defaultProps.id = 2;
+      defaultProps.name = 'apple';
+      makeSut();
+      const button = screen.getByTestId('button-add-to-cart-apple');
+      fireEvent.press(button);
+      expect(button).toBeTruthy();
+    });
+
+    it('should context initial with three items and add to cart', () => {
+      defaultContextState.contextState.items = [
+        {
+          id: 1,
+          name: 'banana',
+          price: 'R$ 2,00',
+          new: true,
+          image: 'https://image.com/image.png',
+          quantity: 1
+        },
+        {
+          id: 2,
+          name: 'apple',
+          price: 'R$ 2,00',
+          new: true,
+          image: 'https://image.com/image.png',
+          quantity: 1
+        },
+        {
+          id: 5,
+          name: 'orange',
+          price: 'R$ 2,00',
+          new: true,
+          image: 'https://image.com/image.png',
+          quantity: 1
+        }
+      ];
+      defaultProps.id = 2;
+      defaultProps.name = 'apple';
+      makeSut();
+      const buttonAddCart = screen.getByTestId('button-add-to-cart-apple');
+      fireEvent.press(buttonAddCart);
+      const buttonIncrement = screen.getByTestId(
+        'button-increment-quantity-apple'
+      );
     });
   });
 });

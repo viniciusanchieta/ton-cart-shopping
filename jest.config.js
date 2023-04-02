@@ -12,9 +12,9 @@ module.exports = {
     'src/**/*.{ts,tsx}',
     '!src/**/index.{ts,tsx}',
     '!src/**/*-styles.ts',
-    '!src/**/*.interface.ts',
-    '!src/**/*-factory.tsx',
+    '!src/**/*{.interface,.enum,-styles,.type}.ts',
     '!src/presentation/common/icons/**/*',
-    '!src/infra/**/*'
+    '!src/infra/**/*',
+    '!src/main/**/*'
   ]
 };
