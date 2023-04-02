@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { useShoppingCartContext } from '~/infra/hooks';
 import {
   MinusIcon,
   PlusIcon,
@@ -21,6 +22,8 @@ function ProductComponent({
     quantity: 0
   });
 
+  const { setContextState, contextState } = useShoppingCartContext();
+
   function handleState(key: string, value: boolean | number) {
     setState(prevState => ({ ...prevState, [key]: value }));
   }
@@ -33,9 +36,70 @@ function ProductComponent({
     return <Text style={styles.flagProduct}>Novo</Text>;
   }
 
+  function handleQuantityInContext(action: 'increment' | 'decrement') {
+    const productExists = contextState.items?.find(item => item.id === id);
+
+    if (productExists) {
+      const newItems = contextState.items
+        ?.map(item => {
+          const idIsEqual = item.id === id;
+          const actionIsIncrement = action === 'increment';
+          const quantityIsLessThanOrEqualToZero = item.quantity <= 1;
+
+          if (idIsEqual && actionIsIncrement) {
+            return {
+              ...item,
+              quantity: item.quantity + 1
+            };
+          }
+
+          if (
+            idIsEqual &&
+            !actionIsIncrement &&
+            !quantityIsLessThanOrEqualToZero
+          ) {
+            return {
+              ...item,
+              quantity: item.quantity - 1
+            };
+          }
+
+          if (
+            idIsEqual &&
+            !actionIsIncrement &&
+            quantityIsLessThanOrEqualToZero
+          ) {
+            return null;
+          }
+
+          return item;
+        })
+        .filter(Boolean);
+
+      setContextState({
+        ...contextState,
+        items: newItems as []
+      });
+    } else {
+      setContextState({
+        items: [
+          ...contextState.items,
+          {
+            id,
+            name,
+            price,
+            image: urlImage,
+            quantity: 1
+          }
+        ]
+      });
+    }
+  }
+
   function handleButtonAddToCart(): void {
     handleState('addedToCart', true);
     handleState('quantity', 1);
+    handleQuantityInContext('increment');
   }
 
   function handleUpdateQuantity(action: 'increment' | 'decrement'): void {
@@ -43,13 +107,17 @@ function ProductComponent({
     const actionIsIncrement = action === 'increment';
 
     if (!actionIsIncrement && quantityIsZero) {
-      return handleState('addedToCart', false);
+      handleState('addedToCart', false);
+      handleQuantityInContext('decrement');
+      return;
     }
 
     if (actionIsIncrement) {
       handleState('quantity', state.quantity + 1);
+      handleQuantityInContext('increment');
     } else {
       handleState('quantity', state.quantity - 1);
+      handleQuantityInContext('decrement');
     }
   }
 
@@ -59,7 +127,7 @@ function ProductComponent({
         <TouchableOpacity
           style={styles.button}
           onPress={handleButtonAddToCart}
-          testID='button-add-to-cart'
+          testID={`button-add-to-cart-${name}`}
         >
           <ShoppingCartSimpleIcon
             color={baseTheme.colors.green}
@@ -75,7 +143,7 @@ function ProductComponent({
       <View style={styles.button}>
         <TouchableOpacity
           onPress={() => handleUpdateQuantity('decrement')}
-          testID='button-decrement-quantity'
+          testID={`button-decrement-quantity-${name}`}
         >
           <MinusIcon color={baseTheme.colors.green} weight='bold' size={14} />
         </TouchableOpacity>
@@ -84,7 +152,7 @@ function ProductComponent({
         </Text>
         <TouchableOpacity
           onPress={() => handleUpdateQuantity('increment')}
-          testID='button-increment-quantity'
+          testID={`button-increment-quantity-${name}`}
         >
           <PlusIcon color={baseTheme.colors.green} weight='bold' size={14} />
         </TouchableOpacity>

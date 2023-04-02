@@ -46,6 +46,20 @@ export const styles = StyleSheet.create({
   contentContainerStyle: {
     flexGrow: 1,
     gap: 40,
-    paddingBottom: 300
+    paddingBottom: 400
+  },
+  status: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    gap: 30
+  },
+  statusMessage: {
+    fontFamily: fonts.medium,
+    fontSize: 15,
+    color: colors.black,
+    textAlign: 'center'
   }
 });
