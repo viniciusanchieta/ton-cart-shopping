@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { useShoppingCartContext } from '~/infra/hooks';
 import {
@@ -24,8 +24,19 @@ function ProductComponent({
 
   const { setContextState, contextState } = useShoppingCartContext();
 
-  function handleState(key: string, value: boolean | number) {
+  function handleState(key: string, value: boolean | number): void {
     setState(prevState => ({ ...prevState, [key]: value }));
+  }
+
+  function handleStateByContext(): void {
+    const productExists = contextState.items?.find(item => item.id === id);
+
+    if (!productExists) {
+      return handleState('addedToCart', false);
+    }
+
+    handleState('addedToCart', true);
+    handleState('quantity', productExists.quantity);
   }
 
   function handleRelease(): JSX.Element | undefined {
@@ -36,7 +47,7 @@ function ProductComponent({
     return <Text style={styles.flagProduct}>Novo</Text>;
   }
 
-  function handleQuantityInContext(action: 'increment' | 'decrement') {
+  function handleQuantityInContext(action: 'increment' | 'decrement'): void {
     const productExists = contextState.items?.find(item => item.id === id);
 
     if (productExists) {
@@ -121,7 +132,7 @@ function ProductComponent({
     }
   }
 
-  function handleButtonAddQuantityComponent() {
+  function handleButtonAddQuantityComponent(): JSX.Element {
     if (!state.addedToCart) {
       return (
         <TouchableOpacity
@@ -159,6 +170,10 @@ function ProductComponent({
       </View>
     );
   }
+
+  useEffect(() => {
+    handleStateByContext();
+  }, [contextState]);
 
   return (
     <View style={styles.container} testID={`product-${name}`}>

@@ -7,8 +7,8 @@ import {
   View
 } from 'react-native';
 import { useShoppingCartContext } from '~/infra/hooks';
+import type { UseNavigationProps } from '~/infra/navigation';
 import { useNavigation } from '~/infra/navigation';
-import type { UseNavigationProps } from '~/infra/navigation/interfaces';
 import { ShoppingCartSimpleIcon } from '~/presentation/common/icons';
 import baseTheme from '~/presentation/common/themes/base-theme';
 import { ProductComponent } from '~/presentation/screens/product-list/components';
@@ -23,7 +23,7 @@ function ProductListComponent({ products, error, loading }: ProductListProps) {
   } = useShoppingCartContext();
 
   function handlePress() {
-    navigation.navigate('cart');
+    navigation.navigate('ShoppingCart');
   }
 
   function handleLoading() {
