@@ -67,11 +67,11 @@ describe('Product list component', () => {
   });
 
   describe('Navigation', () => {
-    it('should navigate to cart', () => {
+    it('should navigate to shopping cart', () => {
       makeSut();
       const cartButton = screen.getByTestId('cart-button');
       fireEvent.press(cartButton);
-      expect(mockNavigate).toHaveBeenCalledWith('cart');
+      expect(mockNavigate).toHaveBeenCalledWith('ShoppingCart');
     });
   });
 

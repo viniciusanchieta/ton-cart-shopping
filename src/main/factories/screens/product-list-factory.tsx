@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { LoadProducts } from '~/domain/usecases';
-import { ShoppingCartProvider } from '~/infra/providers';
 import { makeLoadProductsFactory } from '~/main/factories/usecases';
 import { BaseLayoutComponent } from '~/presentation/common/layouts';
 import { ProductListScreen } from '~/presentation/screens';
@@ -30,14 +29,12 @@ export function MakeProductListScreen() {
     });
 
   return (
-    <BaseLayoutComponent>
-      <ShoppingCartProvider>
-        <ProductListScreen
-          error={state.error}
-          loading={state.loading}
-          products={state.products}
-        />
-      </ShoppingCartProvider>
+    <BaseLayoutComponent background='main'>
+      <ProductListScreen
+        error={state.error}
+        loading={state.loading}
+        products={state.products}
+      />
     </BaseLayoutComponent>
   );
 }

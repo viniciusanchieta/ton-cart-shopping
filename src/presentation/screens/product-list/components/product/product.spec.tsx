@@ -52,18 +52,20 @@ describe('Product component', () => {
 
   describe('Interaction', () => {
     it('should add to cart', () => {
+      defaultProps.name = 'pineapple';
+      defaultProps.id = 10;
       makeSut();
-      const button = screen.getByTestId('button-add-to-cart-banana');
+      const button = screen.getByTestId('button-add-to-cart-pineapple');
       fireEvent.press(button);
       expect(button).toBeTruthy();
     });
 
     it('should increment quantity', () => {
       makeSut();
-      const buttonAddCart = screen.getByTestId('button-add-to-cart-banana');
+      const buttonAddCart = screen.getByTestId('button-add-to-cart-pineapple');
       fireEvent.press(buttonAddCart);
       const buttonIncrement = screen.getByTestId(
-        'button-increment-quantity-banana'
+        'button-increment-quantity-pineapple'
       );
       fireEvent.press(buttonIncrement);
       const textQuantity = screen.getByTestId('text-quantity');
@@ -72,14 +74,14 @@ describe('Product component', () => {
 
     it('should decrement quantity', () => {
       makeSut();
-      const buttonAddCart = screen.getByTestId('button-add-to-cart-banana');
+      const buttonAddCart = screen.getByTestId('button-add-to-cart-pineapple');
       fireEvent.press(buttonAddCart);
       const buttonIncrement = screen.getByTestId(
-        'button-increment-quantity-banana'
+        'button-increment-quantity-pineapple'
       );
       fireEvent.press(buttonIncrement);
       const buttonDecrement = screen.getByTestId(
-        'button-decrement-quantity-banana'
+        'button-decrement-quantity-pineapple'
       );
       fireEvent.press(buttonDecrement);
       const textQuantity = screen.getByTestId('text-quantity');
@@ -88,10 +90,10 @@ describe('Product component', () => {
 
     it('should remove from cart', () => {
       makeSut();
-      const buttonAddCart = screen.getByTestId('button-add-to-cart-banana');
+      const buttonAddCart = screen.getByTestId('button-add-to-cart-pineapple');
       fireEvent.press(buttonAddCart);
       const buttonDecrement = screen.getByTestId(
-        'button-decrement-quantity-banana'
+        'button-decrement-quantity-pineapple'
       );
       fireEvent.press(buttonDecrement);
     });
@@ -136,8 +138,6 @@ describe('Product component', () => {
         }
       ];
       makeSut();
-      const buttonAddCart = screen.getByTestId('button-add-to-cart-orange');
-      fireEvent.press(buttonAddCart);
       const buttonIncrement = screen.getByTestId(
         'button-increment-quantity-orange'
       );
@@ -147,15 +147,23 @@ describe('Product component', () => {
       );
       fireEvent.press(buttonDecrement);
       const textQuantity = screen.getByTestId('text-quantity');
-      expect(textQuantity).toHaveTextContent('1');
+      expect(textQuantity).toHaveTextContent('2');
     });
 
     it('should remove from cart in apple item', () => {
       defaultProps.id = 2;
       defaultProps.name = 'apple';
+      defaultContextState.contextState.items = [
+        {
+          id: 2,
+          name: 'apple',
+          price: 'R$ 2,00',
+          new: true,
+          image: 'https://image.com/image.png',
+          quantity: 1
+        }
+      ];
       makeSut();
-      const buttonAddCart = screen.getByTestId('button-add-to-cart-apple');
-      fireEvent.press(buttonAddCart);
       const buttonDecrement = screen.getByTestId(
         'button-decrement-quantity-apple'
       );
@@ -202,11 +210,11 @@ describe('Product component', () => {
       defaultProps.id = 2;
       defaultProps.name = 'apple';
       makeSut();
-      const buttonAddCart = screen.getByTestId('button-add-to-cart-apple');
-      fireEvent.press(buttonAddCart);
       const buttonIncrement = screen.getByTestId(
         'button-increment-quantity-apple'
       );
+      fireEvent.press(buttonIncrement);
+      expect(buttonIncrement).toBeTruthy();
     });
   });
 });
