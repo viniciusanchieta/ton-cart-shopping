@@ -28,7 +28,7 @@ O intuito do projeto é criar um carrinho de compras com a possibilidade de adic
 
 ## Arquitetura e padrões de projeto
 
-<!-- arquitetura multicamadas com ddd e barrel pattern -->
+A aplicação foi desenvolvida utilizando os padrões de projeto DDD (Domain Driven Design) e Barrel Pattern. A aplicação foi desenvolvida utilizando a arquitetura multicamadas.
 
 ### Arquitetura multicamadas
 
