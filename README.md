@@ -3,7 +3,6 @@
 <h1 align="center">Cart Shopping</h1>
 
 <p align="center" margin-top="25px" >
-  <img src="https://img.shields.io/badge/Status-Development-red" alt="Status: Development" />
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/viniciusanchieta/ton-cart-shopping?color=green">
 
   <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/viniciusanchieta/ton-cart-shopping?color=green">
@@ -72,7 +71,7 @@ $ git clone https://github.com/viniciusanchieta/ton-cart-shopping.git
 ```bash
 $ npm install
 $ bundle install
-$ cd ios && pod install
+$ cd ios && pod install && cd ..
 ```
 
 #### Executar o projeto
