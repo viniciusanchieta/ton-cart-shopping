@@ -36,7 +36,8 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontFamily: fonts.semiBold,
-    fontSize: 18
+    fontSize: 18,
+    color: colors.black
   },
   columnWrapperStyle: {
     flexWrap: 'wrap',
